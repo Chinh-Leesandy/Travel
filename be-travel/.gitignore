@@ -41,4 +41,4 @@ dist/
 build/
 
 # Ignore node_modules in production
-serviceAccountKey.json
+serviceAccountKey.json/
