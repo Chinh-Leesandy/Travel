@@ -40,4 +40,4 @@ bower_components
 dist/
 build/
 
-be-travel/serviceAccountKey.json
+./serviceAccountKey.json
