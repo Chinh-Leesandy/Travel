@@ -1,8 +1,30 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import IconFace from '../../../assets/IconFace'
 import IconGG from '../../../assets/IconGG'
 import IconTwitter from '../../../assets/IconTwitter'
+import { useLoginAuth } from '../../../hooks/auth/login/useLoginAuth'
+import type { Login as ILogin } from '../../../types/auth/Login'
 const Login: React.FC = () => {
+  const { LoginWithGG, LoginWithEmail, LoginWithFace } = useLoginAuth()
+  const LoginWithGoogle = async () => {
+    await LoginWithGG()
+  }
+  const LoginWithFacebook = async () => {
+    await LoginWithFace()
+  }
+  const [login, setLogin] = useState<ILogin>({
+    email: '',
+    password: ''
+  })
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setLogin({ ...login, [name]: value })
+  }
+  const LoginWithEmailPassword = async (e: React.FormEvent) => {
+    e.preventDefault()
+    await LoginWithEmail(login)
+  }
   return (
     <div className='flex mx-16 my-24'>
       <div className='w-1/2'>
@@ -13,17 +35,21 @@ const Login: React.FC = () => {
         />
       </div>
       <div className='w-1/2 flex flex-col justify-center items-center rounded-r-md text-primary '>
-        <form className='w-full p-8'>
-          <div className='relative p-2 inline-block text-center mx-44'>
-            <div className='absolute top-0 left-0 h-full w-10 border-l-2 border-t-2 border-[#DF6951] pb-6'></div>
-            <div className='absolute top-0 right-0 h-full w-10 border-r-2 border-b-2 border-[#DF6951] pt-6'></div>
-            <span className='font-bold '>TRAVEL TOURS</span>
-          </div>
-          <div className='socialMedia flex justify-center items-center gap-8 mt-5'>
+        <div className='relative p-2 inline-block text-center mx-44'>
+          <div className='absolute top-0 left-0 h-full w-10 border-l-2 border-t-2 border-[#DF6951]'></div>
+          <div className='absolute top-0 right-0 h-full w-10 border-r-2 border-b-2 border-[#DF6951]'></div>
+          <span className='font-bold '>TRAVEL TOURS</span>
+        </div>
+        <div className='socialMedia flex justify-center items-center gap-8 mt-5'>
+          <button onClick={LoginWithFacebook}>
             <IconFace />
+          </button>
+          <button onClick={LoginWithGoogle}>
             <IconGG />
-            <IconTwitter />
-          </div>
+          </button>
+          <IconTwitter />
+        </div>
+        <form className='w-full px-8 mt-3' onSubmit={LoginWithEmailPassword}>
           <div className='mb-4'>
             <label htmlFor='email' className='block text-sm font-medium text-gray-700'>
               Email
@@ -34,6 +60,8 @@ const Login: React.FC = () => {
               id='email'
               placeholder='Enter your email'
               className='w-full p-3 rounded bg-gray-100 mt-1 '
+              value={login.email}
+              onChange={handleInputChange}
             />
           </div>
           <div className='mb-4'>
@@ -46,6 +74,8 @@ const Login: React.FC = () => {
               id='password'
               placeholder='Enter your password'
               className='w-full p-3 rounded bg-gray-100 mt-1'
+              value={login.password}
+              onChange={handleInputChange}
             />
           </div>
           <div className='forget-password mb-4'>

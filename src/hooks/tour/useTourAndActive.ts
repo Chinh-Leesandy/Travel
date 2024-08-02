@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import ApiSearchTour from "../../features/tour/ApiSearchTour";
+import { useQuery } from '@tanstack/react-query'
+import ApiSearchTour from '../../features/tour/ApiSearchTour'
 
 const useTourAndActive = (city: string) => {
   return useQuery({
@@ -8,7 +8,7 @@ const useTourAndActive = (city: string) => {
     enabled: !!city,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
-    refetchInterval: false,
+    refetchInterval: false
   })
 };
-export default useTourAndActive;
+export default useTourAndActive

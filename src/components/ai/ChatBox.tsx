@@ -1,85 +1,51 @@
-import { useEffect, useRef, useState } from 'react'
-import { Button, Input, VStack, Box, Text, Spinner } from '@chakra-ui/react'
-import { GoogleGenerativeAI } from '@google/generative-ai'
-
-const genAI = new GoogleGenerativeAI('AIzaSyArcBpI8IJ__AQXxWH1IJ0b1TydhNZcu5k')
-const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
-
-interface Message {
-  text: string
-  sender: 'user' | 'ai'
-  timestamp: Date
-  isCode?: boolean
-}
+import { Input, VStack, Box, Text } from '@chakra-ui/react'
+import { useChat } from '../../hooks/ai/useChat'
+import Loading from '../ui/loading/Loading'
+import Button from '../ui/button/Button'
 
 const ChatBox = () => {
-  const chatContainerRef = useRef<HTMLDivElement | null>(null)
-  const [loading, setLoading] = useState<boolean>(false)
-  const [messages, setMessages] = useState<Message[]>([])
-  const [inputText, setInputText] = useState<string>('')
-
-  useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
-    }
-  }, [messages])
-
-  const sendMessage = async () => {
-    if (!inputText) return
-
-    setMessages((prevMessages) => [...prevMessages, { text: inputText, sender: 'user', timestamp: new Date() }])
-
-    setLoading(true)
-
-    try {
-      const result = await model.generateContent(inputText)
-      const text = result.response.text()
-      const isCode = text.includes('```')
-
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          text: text,
-          sender: 'ai',
-          timestamp: new Date(),
-          isCode
-        }
-      ])
-    } catch (error) {
-      console.error('generateContent error: ', error)
-    } finally {
-      setLoading(false)
-      setInputText('')
-    }
-  }
+  const { chatContainerRef, loading, messages, inputText, setInputText, sendMessage } = useChat()
 
   return (
-    <VStack spacing={4} align='stretch'>
-      <Box className='chat-window bg-gray-100 p-4 flex-1 overflow-auto' ref={chatContainerRef}>
+    <VStack spacing={0} align='stretch' h='full'>
+      <Box
+        className='chat-window bg-white p-4 flex-1 overflow-y-auto'
+        ref={chatContainerRef}
+        borderRadius='md'
+        boxShadow='md'
+        border='1px'
+        borderColor='gray.200'
+        maxH='40vh'
+      >
         {messages.map((message, index) => (
           <Box
             key={index}
-            className={`message p-2 my-2 ${message.sender === 'user' ? 'bg-blue-200 text-blue-800' : 'bg-gray-200 text-gray-800'} rounded`}
+            className={`message p-3 my-2 rounded-lg max-w-52 ${
+              message.sender === 'user' ? 'bg-[#df6951] text-white ml-auto' : 'bg-gray-200 text-gray-800'
+            }`}
+            alignSelf={message.sender === 'user' ? 'flex-end' : 'flex-start'}
           >
             <Text whiteSpace={message.isCode ? 'pre-wrap' : 'normal'}>{message.text}</Text>
-            <Text className={`text-sm ${message.sender === 'user' ? 'text-blue-600' : 'text-gray-600'}`}>
-              {message.timestamp.toLocaleString()}
+            <Text className='text-xs mt-1' color='white'>
+              {message.timestamp.toLocaleTimeString()}
             </Text>
           </Box>
         ))}
       </Box>
-      <Box className='p-4 bg-gray-200 flex items-center'>
+      <Box className='p-4 bg-white flex items-center border-t border-gray-200'>
         <Input
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
-          placeholder='Type your message here...'
+          placeholder='Type a message...'
           size='md'
           mr={2}
+          borderRadius='full'
+          borderColor='gray.300'
         />
-        <Button onClick={sendMessage} colorScheme='blue' disabled={loading}>
+        <Button type='button' onClick={sendMessage} disabled={loading}>
           Send
         </Button>
-        {loading && <Spinner ml={2} />}
+        {loading && <Loading />}
       </Box>
     </VStack>
   )

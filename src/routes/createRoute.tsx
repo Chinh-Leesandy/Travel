@@ -9,6 +9,7 @@ import FlightPage from '../page/FlightPage'
 import MainLayout from '../components/layout/MainLayout'
 import Login from '../components/auth/login/Login'
 import Register from '../components/auth/register/Register'
+import CityDetailPage from '../page/CityDetailPage'
 const createRoute = createBrowserRouter([
   {
     path: '/',
@@ -22,6 +23,10 @@ const createRoute = createBrowserRouter([
       {
         path: '/services',
         element: <ServicesPage />
+      },
+      {
+        path: '/services/city/:id',
+        element: <CityDetailPage />
       },
       {
         path: '/services/tours',

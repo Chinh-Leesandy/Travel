@@ -1,6 +1,7 @@
 import React from 'react'
 import BgService from '../assets/Bg_Service.png'
 import TabServiceTravel from '../components/services/TabServiceTravel'
+import ListCity from '../components/city/listcities/ListCity'
 
 const ServicesPage: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const ServicesPage: React.FC = () => {
           </div>
         </div>
       </div>
+      <ListCity />
     </>
   )
 }

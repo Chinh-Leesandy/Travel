@@ -1,5 +1,5 @@
-import { axiosInstance } from "../../libs/services/initApiLocal";
-import { Blog } from "../../types/blogs/Blog";
+import { axiosInstance } from '../../libs/services/initApiLocal'
+import { Blog } from '../../types/blogs/Blog'
 
 export const ApiBlogs = {
   createBlog: async (blog: Blog) => {

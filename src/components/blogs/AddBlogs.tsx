@@ -2,37 +2,46 @@ import { useDisclosure } from '@chakra-ui/react'
 import { useState } from 'react'
 import Button from '../ui/button/Button'
 import CustomModal from '../ui/modal/Modal'
-import { ApiBlogs } from '../../features/blog/ApiBlogs'
+import Loading from '../ui/loading/Loading'
+import { useAddBlog } from '../../hooks/blog/useAddBlog'
 
 const AddBlogs: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [title, setTitle] = useState<string>('')
-  const [image, setImage] = useState<string>('')
-  const [content, setContent] = useState<string>('')
-  const [rating, setRating] = useState<string>('')
-  const [loading, setLoading] = useState<boolean>(false)
+  const [blog, setBlog] = useState({
+    id: '',
+    title: '',
+    image: '',
+    touristAttractions: '',
+    visitTime: '',
+    localCuisine: '',
+    rating: ''
+  })
   const [error, setError] = useState<string | null>(null)
+  const { mutate, isLoading } = useAddBlog()
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setBlog({ ...blog, [name]: value })
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setLoading(true)
     setError(null)
-
     try {
-      await ApiBlogs.createBlog({ id: '', title, image, content, rating })
+      await mutate(blog)
       onClose()
     } catch (err) {
       setError('Failed to create blog post')
-    } finally {
-      setLoading(false)
     }
   }
 
   return (
     <>
-      <Button type='button' onClick={onOpen}>
-        Post Blogs
-      </Button>
+      <div className='flex justify-between items-center w-full px-6 py-4'>
+        <h1 className='text-xl font-bold mb-4'>Danh sách các bài viết</h1>
+        <Button type='button' onClick={onOpen}>
+          Post Blogs
+        </Button>
+      </div>
       <CustomModal
         isOpen={isOpen}
         onClose={onClose}
@@ -42,24 +51,25 @@ const AddBlogs: React.FC = () => {
             <Button type='button' onClick={onClose}>
               Cancel
             </Button>
-            <Button type='submit' onClick={(e) => handleSubmit(e)} disabled={loading}>
-              {loading ? 'Posting...' : 'Post'}
+            <Button type='submit' form='blog-form' disabled={isLoading}>
+              {isLoading ? <Loading /> : 'Post'}
             </Button>
           </div>
         }
       >
         <div className='p-4'>
           {error && <p className='text-red-500 mb-4'>{error}</p>}
-          <form onSubmit={handleSubmit}>
+          <form id='blog-form' onSubmit={handleSubmit}>
             <div className='mb-4'>
               <label className='block text-sm font-medium mb-1' htmlFor='title'>
                 Title
               </label>
               <input
                 id='title'
+                name='title'
                 type='text'
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                value={blog.title}
+                onChange={handleInputChange}
                 className='border border-gray-300 rounded p-2 w-full'
                 required
               />
@@ -70,21 +80,51 @@ const AddBlogs: React.FC = () => {
               </label>
               <input
                 id='image'
+                name='image'
                 type='text'
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
+                value={blog.image}
+                onChange={handleInputChange}
                 className='border border-gray-300 rounded p-2 w-full'
                 required
               />
             </div>
             <div className='mb-4'>
-              <label className='block text-sm font-medium mb-1' htmlFor='content'>
-                Content
+              <label className='block text-sm font-medium mb-1' htmlFor='touristAttractions'>
+                Tourist Attractions
               </label>
               <textarea
-                id='content'
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
+                id='touristAttractions'
+                name='touristAttractions'
+                value={blog.touristAttractions}
+                onChange={handleInputChange}
+                className='border border-gray-300 rounded p-2 w-full'
+                rows={4}
+                required
+              />
+            </div>
+            <div className='mb-4'>
+              <label className='block text-sm font-medium mb-1' htmlFor='visitTime'>
+                Best Time to Visit
+              </label>
+              <textarea
+                id='visitTime'
+                name='visitTime'
+                value={blog.visitTime}
+                onChange={handleInputChange}
+                className='border border-gray-300 rounded p-2 w-full'
+                rows={4}
+                required
+              />
+            </div>
+            <div className='mb-4'>
+              <label className='block text-sm font-medium mb-1' htmlFor='localCuisine'>
+                Local Cuisine
+              </label>
+              <textarea
+                id='localCuisine'
+                name='localCuisine'
+                value={blog.localCuisine}
+                onChange={handleInputChange}
                 className='border border-gray-300 rounded p-2 w-full'
                 rows={4}
                 required
@@ -96,9 +136,10 @@ const AddBlogs: React.FC = () => {
               </label>
               <input
                 id='rating'
+                name='rating'
                 type='text'
-                value={rating}
-                onChange={(e) => setRating(e.target.value)}
+                value={blog.rating}
+                onChange={handleInputChange}
                 className='border border-gray-300 rounded p-2 w-full'
                 required
               />

@@ -4,27 +4,27 @@ import { User } from '../../types/auth/User'
 export interface UserAuthState {
   accessToken: string | null
   refreshToken: string | null
-  user: User | null
+  Iuser: User | null
 }
 const initialState: UserAuthState = {
   accessToken: null,
   refreshToken: null,
-  user: null
+  Iuser: null
 }
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<{ isToken: string; refreshToken: string; user: User }>) => {
-      state.accessToken = action.payload.isToken
+    login: (state, action: PayloadAction<UserAuthState>) => {
+      state.accessToken = action.payload.accessToken
       state.refreshToken = action.payload.refreshToken
-      state.user = action.payload.user
+      state.Iuser = action.payload.Iuser
     },
     logout: (state) => {
       state.accessToken = null
       state.refreshToken = null
-      state.user = null
+      state.Iuser = null
     }
   }
 })

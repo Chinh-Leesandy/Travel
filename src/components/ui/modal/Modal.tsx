@@ -19,9 +19,9 @@ interface CustomModalProps {
 
 const CustomModal: React.FC<CustomModalProps> = ({ isOpen, onClose, title, children, footer }) => {
   return (
-    <Modal isCentered blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
+    <Modal isCentered blockScrollOnMount={false} isOpen={isOpen} onClose={onClose} size='lg'>
       <ModalOverlay bg='none' backdropFilter='blur(5px)' />
-      <ModalContent>
+      <ModalContent maxHeight='80vh' overflowY='auto'>
         <ModalHeader>{title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>{children}</ModalBody>

@@ -24,10 +24,18 @@ const FormSearchFlight: React.FC = () => {
       [name]: name === 'adults' || name === 'children' ? Number(value) : value
     }))
   }
-
+  const searchFlightParams: Record<string, string> = {
+    originCity: searchFlight.originCity,
+    destinationCity: searchFlight.destinationCity,
+    departureDate: searchFlight.departureDate,
+    returnDate: searchFlight.returnDate,
+    adults: searchFlight.adults.toString(),
+    children: searchFlight.children?.toString() ?? '',
+    travelClass: searchFlight.travelClass
+  }
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
-    const params = new URLSearchParams(searchFlight).toString()
+    const params = new URLSearchParams(searchFlightParams).toString()
     navigate(`/services/flight?${params}`)
   }
 
