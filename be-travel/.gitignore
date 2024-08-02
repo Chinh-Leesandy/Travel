@@ -39,5 +39,6 @@ bower_components
 # Production build
 dist/
 build/
- 
-serviceAccountKey.json/
+
+# Ignore serviceAccountKey in production
+serviceAccountKey.json
