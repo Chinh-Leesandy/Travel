@@ -40,4 +40,4 @@ bower_components
 dist/
 build/
  
-./serviceAccountKey.json
+serviceAccountKey.json/
