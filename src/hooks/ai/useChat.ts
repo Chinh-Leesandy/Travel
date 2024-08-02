@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
-const genAI = new GoogleGenerativeAI('AIzaSyArcBpI8IJ__AQXxWH1IJ0b1TydhNZcu5k')
+const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINIAI)
 const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
 
 interface Message {
