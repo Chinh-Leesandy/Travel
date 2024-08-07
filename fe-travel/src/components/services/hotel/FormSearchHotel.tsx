@@ -31,8 +31,8 @@ const FormHotelSearch: React.FC = () => {
     navigate(`/services/hotel?${queryParams}`)
   }
   return (
-    <form onSubmit={handleSubmit} className='p-6'>
-      <div className='mb-4'>
+    <form onSubmit={handleSubmit} className='p-3'>
+      <div className='mb-4 flex gap-8 items-center'>
         <label className='block text-sm font-semibold mb-2' htmlFor='city'>
           City:
         </label>
@@ -45,7 +45,7 @@ const FormHotelSearch: React.FC = () => {
           className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500'
         />
       </div>
-      <div className='mb-4'>
+      <div className='mb-4 flex'>
         <label className='block text-sm font-semibold mb-2' htmlFor='radius'>
           Radius (KM):
         </label>
@@ -55,10 +55,10 @@ const FormHotelSearch: React.FC = () => {
           name='radius'
           value={searchHotel.radius}
           onChange={(e) => setSearchHotel({ ...searchHotel, radius: Number(e.target.value) })}
-          className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500'
+          className='shadow appearance-none border rounded w-full py-1 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500'
         />
       </div>
-      <div className='mb-4'>
+      <div className='mb-4 flex gap-2 items-center'>
         <label className='block text-sm font-bold mb-2' htmlFor='amenities'>
           Amenities:
         </label>

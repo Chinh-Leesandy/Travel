@@ -1,5 +1,5 @@
 import React from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { SearchFlight } from '../types/flight/SearchFlight'
 import useSearchFlight from '../hooks/flight/useSearchFlight'
 import BgDetail from '../assets/Bg_Detail.png'
@@ -9,6 +9,9 @@ import { formatDateTime, formatTime } from '../utils/formatTime'
 import { Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@chakra-ui/icons'
 import Loading from '../components/ui/loading/Loading'
+import { OrderFlight } from '../types/flight/OrderFlight'
+import { OrderFlightFirebase } from '../hooks/order/OrderFlightFirebase'
+import { useAppSelector } from '../app/store/hooks'
 const FlightPage: React.FC = () => {
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
@@ -21,10 +24,24 @@ const FlightPage: React.FC = () => {
     children: Number(searchParams.get('children')) || 0,
     travelClass: searchParams.get('travelClass') || 'ECONOMY'
   }
-  console.log(params)
+  const IUser = useAppSelector((state) => state.auth.Iuser)
+  const navigate = useNavigate()
   const { data, isLoading, error } = useSearchFlight(params)
   if (error) return <div>Error: {error.message}</div>
-  console.log(data)
+  const handleBooking = async (item: Flight) => {
+    if (IUser) {
+      const orderFlight: OrderFlight = {
+        orderId: `${Date.now()}`,
+        user: IUser,
+        flight: item,
+        flightDetails: params,
+        bookingDate: new Date().toISOString()
+      }
+      await OrderFlightFirebase(orderFlight)
+    } else {
+      navigate('/auth/login')
+    }
+  }
   return (
     <>
       <div className='relative'>
@@ -118,7 +135,9 @@ const FlightPage: React.FC = () => {
                   </MenuList>
                 </Menu>
                 <div className='mt-4'>
-                  <Button type='button'>Booking Flight</Button>
+                  <Button type='button' onClick={() => handleBooking(item)}>
+                    Booking Flight
+                  </Button>
                 </div>
               </div>
             ))}

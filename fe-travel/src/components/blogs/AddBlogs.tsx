@@ -8,7 +8,6 @@ import { useAddBlog } from '../../hooks/blog/useAddBlog'
 const AddBlogs: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [blog, setBlog] = useState({
-    id: '',
     title: '',
     image: '',
     touristAttractions: '',
@@ -17,7 +16,8 @@ const AddBlogs: React.FC = () => {
     rating: ''
   })
   const [error, setError] = useState<string | null>(null)
-  const { mutate, isLoading } = useAddBlog()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { mutate } = useAddBlog()
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setBlog({ ...blog, [name]: value })
@@ -26,12 +26,16 @@ const AddBlogs: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError(null)
-    try {
-      await mutate(blog)
-      onClose()
-    } catch (err) {
-      setError('Failed to create blog post')
-    }
+    setIsLoading(true)
+    mutate(blog, {
+      onSuccess: () => {
+        onClose()
+        setIsLoading(false)
+      },
+      onError: () => {
+        setError('Failed to create blog post')
+      }
+    })
   }
 
   return (

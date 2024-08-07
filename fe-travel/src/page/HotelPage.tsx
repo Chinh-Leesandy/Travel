@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { SearchHotel } from '../types/hotel/SearchHotel'
 import useSearchHotel from '../hooks/hotel/useSearchHotel'
 import BgDetail from '../assets/Bg_Detail.png'
@@ -9,6 +9,9 @@ import { useDisclosure } from '@chakra-ui/react'
 import CustomModal from '../components/ui/modal/Modal'
 import { BookingHotel } from '../types/hotel/BookingHotel'
 import Loading from '../components/ui/loading/Loading'
+import { useAppSelector } from '../app/store/hooks'
+import { OrderHotel } from '../types/hotel/OrderHotel'
+import { OrderHotelFirebase } from '../hooks/order/OrderHotelFirebase'
 
 const HotelPage: React.FC = () => {
   const location = useLocation()
@@ -21,12 +24,14 @@ const HotelPage: React.FC = () => {
   }
   console.log(params)
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [selectedHotel, setSelectedHotel] = useState<Hotel | null>(null)
+  const [selectedHotel, setSelectedHotel] = useState<Hotel>()
   const [bookingHotel, setBookingHotel] = useState<BookingHotel>({
     checkIn: '',
     checkOut: '',
     roomNumber: ''
   })
+  const Iuser = useAppSelector((state) => state.auth.Iuser)
+  const navigate = useNavigate()
   const { data, isLoading, error } = useSearchHotel(params)
 
   if (error) return <div>Error: {error.message}</div>
@@ -35,8 +40,22 @@ const HotelPage: React.FC = () => {
     setSelectedHotel(hotel)
     onOpen()
   }
+  const handleBooking = async () => {
+    if (Iuser && selectedHotel) {
+      const orderHotel: OrderHotel = {
+        orderId: `${Date.now()}`,
+        user: Iuser,
+        hotel: selectedHotel,
+        hotelDetail: bookingHotel,
+        bookingDate: new Date().toISOString()
+      }
+      await OrderHotelFirebase(orderHotel)
+      onClose()
+    } else {
+      navigate('/auth/login')
+    }
+  }
 
-  console.log(data)
   return (
     <>
       <div className='relative'>
@@ -86,7 +105,9 @@ const HotelPage: React.FC = () => {
                   <Button type='button' onClick={onClose}>
                     Cancel
                   </Button>
-                  <Button type='button'>Booking</Button>
+                  <Button type='button' onClick={handleBooking}>
+                    Booking
+                  </Button>
                 </div>
               }
             >

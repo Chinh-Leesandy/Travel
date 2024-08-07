@@ -37,9 +37,10 @@ export const useLoginAuth = () => {
   }
   const LoginWithEmail = async (loginEmail: Login) => {
     try {
-      const res = await signInWithEmailAndPassword(auth, loginEmail.email, loginEmail.password)
+      const res = await signInWithEmailAndPassword(auth, loginEmail.email, loginEmail.password);
       const token = await res.user.getIdToken()
-      const information = await getDoc(doc(db, 'users', res.user.uid))
+      const userDoc = doc(db, 'users', res.user.uid)
+      const information = await getDoc(userDoc)
       if (information.exists()) {
         const data = information.data() as User
         dispatch(login({ accessToken: token, refreshToken: res.user.refreshToken, Iuser: data }))
@@ -48,9 +49,10 @@ export const useLoginAuth = () => {
         throw new Error('User data not found')
       }
     } catch (error) {
-      console.error('login with email and password fails', error)
+      console.error('Login with email and password fails', error)
       throw error
     }
   }
+
   return { LoginWithGG, LoginWithEmail, LoginWithFace }
 }

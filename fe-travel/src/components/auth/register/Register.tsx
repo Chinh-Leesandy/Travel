@@ -5,6 +5,7 @@ import IconGG from '../../../assets/IconGG'
 import IconTwitter from '../../../assets/IconTwitter'
 import { User } from '../../../types/auth/User'
 import { useRegisterAuth } from '../../../hooks/auth/register/useRegisterAuth'
+import { successToast } from '../../../utils/toast'
 const Register: React.FC = () => {
   const [newUser, setNewUser] = useState<User>({
     firstName: '',
@@ -21,6 +22,7 @@ const Register: React.FC = () => {
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     await useRegisterAuth(newUser)
+    successToast('Register successfully')
   }
   return (
     <div className='flex mx-16 my-8'>
@@ -55,6 +57,7 @@ const Register: React.FC = () => {
               className='w-full p-3 rounded bg-gray-100 mt-1 '
               value={newUser.firstName}
               onChange={handleInputChange}
+              required
             />
           </div>
           <div className='mb-4'>
@@ -69,6 +72,7 @@ const Register: React.FC = () => {
               className='w-full p-3 rounded bg-gray-100 mt-1 '
               value={newUser.lastName}
               onChange={handleInputChange}
+              required
             />
           </div>
           <div className='mb-4'>
@@ -83,6 +87,7 @@ const Register: React.FC = () => {
               className='w-full p-3 rounded bg-gray-100 mt-1 '
               value={newUser.email}
               onChange={handleInputChange}
+              required
             />
           </div>
           <div className='mb-4'>
@@ -97,6 +102,7 @@ const Register: React.FC = () => {
               className='w-full p-3 rounded bg-gray-100 mt-1'
               value={newUser.password}
               onChange={handleInputChange}
+              required
             />
           </div>
           <div className='mb-4'>
@@ -111,6 +117,7 @@ const Register: React.FC = () => {
               className='w-full p-3 rounded bg-gray-100 mt-1 '
               value={newUser.phoneNumber}
               onChange={handleInputChange}
+              required
             />
           </div>
           <button type='submit' className='w-full font-bold py-2 rounded-lg text-white bg-[#DF6951]'>

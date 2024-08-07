@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import Button from '../../ui/button/Button'
-
+import { useNavigate } from 'react-router-dom'
 const SearchTour: React.FC = () => {
   const [city, setCity] = useState<string>()
+  const navigate = useNavigate()
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    // Xử lý logic tìm kiếm ở đây
-    console.log('Searching for city:', city)
+    navigate(`/services/tours?city=${city}`)
   }
   return (
     <>

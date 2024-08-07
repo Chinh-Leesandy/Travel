@@ -1,62 +1,128 @@
+import React, { Suspense } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
-import HomePage from '../page/HomePage'
-import ServicesPage from '../page/ServicesPage'
-import BlogsPage from '../page/BlogsPage'
-import AIPage from '../page/AIPage'
-import TourPage from '../page/TourPage'
-import HotelPage from '../page/HotelPage'
-import FlightPage from '../page/FlightPage'
 import MainLayout from '../components/layout/MainLayout'
-import Login from '../components/auth/login/Login'
-import Register from '../components/auth/register/Register'
-import CityDetailPage from '../page/CityDetailPage'
+import Loading from '../components/ui/loading/Loading'
+import ProtectedRoute from './ProtectedRoute'
+
+const HomePage = React.lazy(() => import('../page/HomePage'))
+const ServicesPage = React.lazy(() => import('../page/ServicesPage'))
+const BlogsPage = React.lazy(() => import('../page/BlogsPage'))
+const AIPage = React.lazy(() => import('../page/AIPage'))
+const TourPage = React.lazy(() => import('../page/TourPage'))
+const HotelPage = React.lazy(() => import('../page/HotelPage'))
+const FlightPage = React.lazy(() => import('../page/FlightPage'))
+const CityDetailPage = React.lazy(() => import('../page/CityDetailPage'))
+const BlogDetailPage = React.lazy(() => import('../page/BlogDetailPage'))
+const InformationPage = React.lazy(() => import('../page/InfomationPage'))
+const Login = React.lazy(() => import('../components/auth/login/Login'))
+const Register = React.lazy(() => import('../components/auth/register/Register'))
+
 const createRoute = createBrowserRouter([
   {
     path: '/',
     element: <MainLayout />,
-
     children: [
       {
         path: '/',
-        element: <HomePage />
+        element: (
+          <Suspense fallback={<Loading />}>
+            <HomePage />
+          </Suspense>
+        )
       },
       {
         path: '/services',
-        element: <ServicesPage />
+        element: (
+          <Suspense fallback={<Loading />}>
+            <ServicesPage />
+          </Suspense>
+        )
       },
       {
         path: '/services/city/:id',
-        element: <CityDetailPage />
+        element: (
+          <Suspense fallback={<Loading />}>
+            <CityDetailPage />
+          </Suspense>
+        )
       },
       {
         path: '/services/tours',
-        element: <TourPage />
+        element: (
+          <Suspense fallback={<Loading />}>
+            <TourPage />
+          </Suspense>
+        )
       },
       {
         path: '/services/flight',
-        element: <FlightPage />
+        element: (
+          <Suspense fallback={<Loading />}>
+            <FlightPage />
+          </Suspense>
+        )
       },
       {
         path: '/services/hotel',
-        element: <HotelPage />
+        element: (
+          <Suspense fallback={<Loading />}>
+            <HotelPage />
+          </Suspense>
+        )
       },
       {
         path: '/blogs',
-        element: <BlogsPage />
+        element: (
+          <ProtectedRoute>
+            <Suspense fallback={<Loading />}>
+              <BlogsPage />
+            </Suspense>
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: '/blogs/:id',
+        element: (
+          <Suspense fallback={<Loading />}>
+            <BlogDetailPage />
+          </Suspense>
+        )
       },
       {
         path: '/ai',
-        element: <AIPage />
+        element: (
+          <Suspense fallback={<Loading />}>
+            <AIPage />
+          </Suspense>
+        )
+      },
+      {
+        path: '/information',
+        element: (
+          <ProtectedRoute>
+            <Suspense fallback={<Loading />}>
+              <InformationPage />
+            </Suspense>
+          </ProtectedRoute>
+        )
       }
     ]
   },
   {
     path: '/auth/login',
-    element: <Login />
+    element: (
+      <Suspense fallback={<Loading />}>
+        <Login />
+      </Suspense>
+    )
   },
   {
     path: '/auth/register',
-    element: <Register />
+    element: (
+      <Suspense fallback={<Loading />}>
+        <Register />
+      </Suspense>
+    )
   }
 ])
 
