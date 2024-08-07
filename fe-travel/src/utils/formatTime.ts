@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export const formatTime = (time: string) => {
   const regex = /PT(\d+H)?(\d+M)?/;
   const matches = time.match(regex);
@@ -13,11 +15,18 @@ export const formatTime = (time: string) => {
 export const formatDateTime = (time: string) => {
   const date = new Date(time);
   const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const year = date.getFullYear();
 
   const hours = date.getHours().toString().padStart(2, '0');
   const minutes = date.getMinutes().toString().padStart(2, '0');
 
   return `${day}/${month}/${year} ${hours}:${minutes}`;
+}
+
+export const formatBookingDate = (date: any) => {
+  if (date instanceof Timestamp) {
+    return date.toDate().toLocaleString()
+  }
+  return date
 }

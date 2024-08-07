@@ -5,13 +5,16 @@ import IconGG from '../../../assets/IconGG'
 import IconTwitter from '../../../assets/IconTwitter'
 import { useLoginAuth } from '../../../hooks/auth/login/useLoginAuth'
 import type { Login as ILogin } from '../../../types/auth/Login'
+import { successToast } from '../../../utils/toast'
 const Login: React.FC = () => {
   const { LoginWithGG, LoginWithEmail, LoginWithFace } = useLoginAuth()
   const LoginWithGoogle = async () => {
     await LoginWithGG()
+    successToast('Login with Google successfully')
   }
   const LoginWithFacebook = async () => {
     await LoginWithFace()
+    successToast('Login with Facebook successfully')
   }
   const [login, setLogin] = useState<ILogin>({
     email: '',
@@ -24,6 +27,7 @@ const Login: React.FC = () => {
   const LoginWithEmailPassword = async (e: React.FormEvent) => {
     e.preventDefault()
     await LoginWithEmail(login)
+    successToast('Login with email and password successfully')
   }
   return (
     <div className='flex mx-16 my-24'>
@@ -62,6 +66,7 @@ const Login: React.FC = () => {
               className='w-full p-3 rounded bg-gray-100 mt-1 '
               value={login.email}
               onChange={handleInputChange}
+              required
             />
           </div>
           <div className='mb-4'>
@@ -76,6 +81,7 @@ const Login: React.FC = () => {
               className='w-full p-3 rounded bg-gray-100 mt-1'
               value={login.password}
               onChange={handleInputChange}
+              required
             />
           </div>
           <div className='forget-password mb-4'>

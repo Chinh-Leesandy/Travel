@@ -3,9 +3,11 @@ import Logo from '../../assets/Logo'
 import { navigation, NavigationItem, SubNavigationItem } from '../../types/Navigation'
 import { Link } from 'react-router-dom'
 import { useAppSelector } from '../../app/store/hooks'
-
+// import ColorModeSwitcher from '../ui/dark/light/ColorModeSwitcher'
+import LogOut from '../../hooks/auth/logout/Logout'
 const Header: React.FC = () => {
   const user = useAppSelector((state) => state.auth.Iuser)
+  const logOut = LogOut()
   return (
     <header className='flex justify-around items-center p-2 text-white absolute top-0 left-0 w-full z-10 mx-48 '>
       <div className='logo'>
@@ -32,6 +34,7 @@ const Header: React.FC = () => {
             </li>
           ))}
         </ul>
+        {/* <ColorModeSwitcher /> */}
         <div className='relative group'>
           <div className='w-7 h-7 bg-gray-500 rounded-full flex items-center justify-center cursor-pointer'>
             {user ? (
@@ -51,9 +54,9 @@ const Header: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link to='/logout' className='block px-4 py-2 hover:text-black text-lg'>
+              <div onClick={logOut} className='block px-4 py-2 hover:text-black text-lg cursor-pointer'>
                 Logout
-              </Link>
+              </div>
             </li>
             <li>
               <Link to='/information' className='block px-4 py-2 hover:text-black text-lg'>

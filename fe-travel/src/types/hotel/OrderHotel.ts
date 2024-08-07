@@ -1,10 +1,10 @@
 import { User } from '../auth/User'
 import { Hotel } from './Hotel'
-import { SearchHotel } from './SearchHotel'
+import { BookingHotel } from './BookingHotel'
 export interface OrderHotel {
   orderId: string
   user: User
   hotel: Hotel
-  hotelDetail: SearchHotel
+  hotelDetail: BookingHotel
   bookingDate: string
 }

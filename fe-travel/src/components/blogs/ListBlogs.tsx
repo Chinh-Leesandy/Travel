@@ -1,9 +1,11 @@
 import { Blog } from '../../types/blogs/Blog'
 import Loading from '../ui/loading/Loading'
 import useAllBlogs from '../../hooks/blog/useAllBlogs'
+import { useNavigate } from 'react-router-dom'
 
 const ListBlogs: React.FC = () => {
   const { data, isLoading, isError } = useAllBlogs()
+  const navigate = useNavigate()
   if (isLoading) {
     return (
       <p className='text-center'>
@@ -14,7 +16,6 @@ const ListBlogs: React.FC = () => {
   if (isError) {
     return <p className='text-center text-red-500'>error</p>
   }
-
   return (
     <div className='p-4'>
       {data.length === 0 ? (
@@ -22,7 +23,11 @@ const ListBlogs: React.FC = () => {
       ) : (
         <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
           {data.map((blog: Blog) => (
-            <div key={blog.id} className='border p-4 rounded shadow-md hover:shadow-lg transition-shadow'>
+            <div
+              key={blog.id}
+              className='border p-4 rounded shadow-md hover:shadow-lg transition-shadow'
+              onClick={() => navigate(`/blogs/${blog.id}`)}
+            >
               <div className='overflow-hidden'>
                 <img
                   src={blog.image}
