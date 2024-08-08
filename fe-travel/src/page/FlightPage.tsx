@@ -12,6 +12,7 @@ import Loading from '../components/ui/loading/Loading'
 import { OrderFlight } from '../types/flight/OrderFlight'
 import { OrderFlightFirebase } from '../hooks/order/OrderFlightFirebase'
 import { useAppSelector } from '../app/store/hooks'
+import { successToast } from '../utils/toast'
 const FlightPage: React.FC = () => {
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
@@ -38,8 +39,9 @@ const FlightPage: React.FC = () => {
         bookingDate: new Date().toISOString()
       }
       await OrderFlightFirebase(orderFlight)
+      successToast('Booking Flight successfully')
     } else {
-      navigate('/auth/login')
+      navigate(`/auth/login`, { state: { from: location } })
     }
   }
   return (

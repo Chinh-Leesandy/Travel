@@ -6,10 +6,10 @@ import Loading from '../ui/loading/Loading'
 import { Comment } from '../../types/comment/Comment'
 import { useAddComment } from '../../hooks/comment/useAddComment'
 import { useAppSelector } from '../../app/store/hooks'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { errorToast, successToast } from '../../utils/toast'
-
 const AddComment: React.FC<{ blogId: string }> = ({ blogId }) => {
+  const location = useLocation()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
@@ -29,7 +29,7 @@ const AddComment: React.FC<{ blogId: string }> = ({ blogId }) => {
         userAvatar: user.avatar || ''
       })
       onOpen()
-    } else navigate('/auth/login')
+    } else navigate('/auth/login', { state: { from: location } })
   }
   const { mutate } = useAddComment(blogId, comment)
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

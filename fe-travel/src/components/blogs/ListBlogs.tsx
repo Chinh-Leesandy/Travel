@@ -16,15 +16,16 @@ const ListBlogs: React.FC = () => {
   if (isError) {
     return <p className='text-center text-red-500'>error</p>
   }
+  console.log(data)
   return (
     <div className='p-4'>
       {data.length === 0 ? (
         <p className='text-center'>Không có bài viết nào.</p>
       ) : (
         <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
-          {data.map((blog: Blog) => (
+          {data?.map((blog: Blog, index: number) => (
             <div
-              key={blog.id}
+              key={index}
               className='border p-4 rounded shadow-md hover:shadow-lg transition-shadow'
               onClick={() => navigate(`/blogs/${blog.id}`)}
             >

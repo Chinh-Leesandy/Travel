@@ -73,11 +73,9 @@ const createRoute = createBrowserRouter([
       {
         path: '/blogs',
         element: (
-          <ProtectedRoute>
-            <Suspense fallback={<Loading />}>
-              <BlogsPage />
-            </Suspense>
-          </ProtectedRoute>
+          <Suspense fallback={<Loading />}>
+            <BlogsPage />
+          </Suspense>
         )
       },
       {

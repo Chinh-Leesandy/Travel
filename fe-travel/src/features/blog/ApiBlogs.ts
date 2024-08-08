@@ -1,8 +1,8 @@
 import { axiosInstance } from '../../libs/services/initApiLocal'
-import { Blog } from '../../types/blogs/Blog'
+import { NewBlog } from '../../types/blogs/Blog'
 
 export const ApiBlogs = {
-  createBlog: async (blog: Blog) => {
+  createBlog: async (blog: NewBlog) => {
     try {
       const res = await axiosInstance.post(`blogs`, blog)
       return res.data
