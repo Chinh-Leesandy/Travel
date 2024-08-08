@@ -12,6 +12,7 @@ import Loading from '../components/ui/loading/Loading'
 import { useAppSelector } from '../app/store/hooks'
 import { OrderHotel } from '../types/hotel/OrderHotel'
 import { OrderHotelFirebase } from '../hooks/order/OrderHotelFirebase'
+import { successToast } from '../utils/toast'
 
 const HotelPage: React.FC = () => {
   const location = useLocation()
@@ -50,9 +51,10 @@ const HotelPage: React.FC = () => {
         bookingDate: new Date().toISOString()
       }
       await OrderHotelFirebase(orderHotel)
+      successToast('Booking Hotel successfully')
       onClose()
     } else {
-      navigate('/auth/login')
+      navigate('/auth/login', { state: { from: location } })
     }
   }
 

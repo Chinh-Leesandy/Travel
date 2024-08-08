@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, FacebookAuthProvider } from 'firebase/auth'
 import { auth, db } from '../../../libs/firebaseConfig'
 import { login } from '../../../features/auth/auth-slice'
@@ -12,12 +12,15 @@ import { User } from '../../../types/auth/User'
 export const useLoginAuth = () => {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
+  const location = useLocation();
   const LoginWithGG = async () => {
     try {
       const res = await signInWithPopup(auth, new GoogleAuthProvider())
       const token = await res.user.getIdToken()
       dispatch(login({ accessToken: token, refreshToken: res.user.refreshToken, Iuser: CustomUserFirebase(res.user) }))
-      navigate('/')
+      const from = location.state?.from?.pathname || '/'
+      const searchParams = location.state?.from?.search || ''
+      navigate(`${from}${searchParams}`)
     } catch (error) {
       console.error('login with google fails', error)
       throw error
@@ -44,7 +47,9 @@ export const useLoginAuth = () => {
       if (information.exists()) {
         const data = information.data() as User
         dispatch(login({ accessToken: token, refreshToken: res.user.refreshToken, Iuser: data }))
-        navigate('/')
+        const from = location.state?.from?.pathname || '/'
+        const searchParams = location.state?.from?.search || ''
+        navigate(`${from}${searchParams}`)
       } else {
         throw new Error('User data not found')
       }

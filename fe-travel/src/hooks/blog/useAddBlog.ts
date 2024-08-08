@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient} from '@tanstack/react-query'
-import { Blog } from '../../types/blogs/Blog'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { NewBlog } from '../../types/blogs/Blog'
 import { ApiBlogs } from '../../features/blog/ApiBlogs'
 
 export const useAddBlog = () => {
@@ -7,7 +7,7 @@ export const useAddBlog = () => {
 
   return useMutation({
     mutationKey: ['AddBlog'],
-    mutationFn: (blog: Blog) => ApiBlogs.createBlog(blog),
+    mutationFn: (blog: NewBlog) => ApiBlogs.createBlog(blog),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['AllBlogs'] })
     },

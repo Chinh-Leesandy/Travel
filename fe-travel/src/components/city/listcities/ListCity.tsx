@@ -5,7 +5,7 @@ import Loading from '../../ui/loading/Loading'
 import { useNavigate } from 'react-router-dom'
 
 const ListCity: React.FC = () => {
-  const { data, isLoading, isError } = useAllCities()
+  const { data, isLoading } = useAllCities()
   const navigate = useNavigate()
   return (
     <div className='m-20'>
